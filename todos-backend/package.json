@@ -1,0 +1,18 @@
+{
+  "name": "todos-backend",
+  "private": true,
+  "main": "lib/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest lib",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch-all lib",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage lib"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.1",
+    "jest": "^28.0.2"
+  }
+}
