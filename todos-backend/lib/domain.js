@@ -2,9 +2,7 @@
 
 /**
  * @typedef {number} TodoId
- */
-
-/**
+ *
  * @typedef {Object} Todo
  * @property {TodoId} id
  * @property {string} title

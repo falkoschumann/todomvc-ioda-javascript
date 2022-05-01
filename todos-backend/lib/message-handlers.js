@@ -1,13 +1,10 @@
 // @ts-check
 
-import * as domain from './domain';
-import { loadTodos, storeTodos } from './data';
+import * as domain from './domain.js';
+import { loadTodos, storeTodos } from './data.js';
 
 /**
  * @typedef {import('./domain.js').TodoId} TodoId
- */
-
-/**
  * @typedef {import('./domain.js').Todo} Todo
  */
 

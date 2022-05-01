@@ -1,13 +1,15 @@
 {
   "name": "todos",
   "workspaces": [
-    "todos-backend"
+    "todos-backend",
+    "todos-frontend"
   ],
   "scripts": {
+    "start": "npm start --workspace=todos-frontend",
     "test": "npm run test --workspaces --if-present",
-    "analyze": "npm run eslint:check && npm run prettier:check",
-    "eslint:check": "eslint */lib",
-    "eslint:fix": "eslint --fix */lib",
+    "analyze": "npm run eslint && npm run prettier:check",
+    "eslint": "eslint */lib */src",
+    "eslint:fix": "eslint --fix */lib */src",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write ."
   },
