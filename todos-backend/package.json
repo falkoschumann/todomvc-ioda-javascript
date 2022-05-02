@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "lib/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "engines": {
     "node": ">=14.0.0"

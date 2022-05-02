@@ -2,9 +2,12 @@
   "compilerOptions": {
     "rootDir": "lib",
     "allowJs": true,
-    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
     "composite": true
   },
   "include": ["lib"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.test.js"]
 }
