@@ -7,7 +7,6 @@
   ],
   "scripts": {
     "build": "npm run build --workspace=todos-frontend",
-    "postbuild": "npm test && npm run analyze",
     "start": "npm start --workspace=todos-frontend",
     "test": "npm test --workspaces --if-present",
     "analyze": "npm run eslint && npm run prettier:check",
