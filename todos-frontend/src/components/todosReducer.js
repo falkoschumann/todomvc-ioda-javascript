@@ -24,7 +24,7 @@ export class TodosState {
 }
 
 /** @type {TodosState} */
-export const initialState = {
+export const initialTodosState = {
   nowShowing: Filter.ALL_TODOS,
   editing: null,
   newTodo: '',
@@ -159,7 +159,7 @@ export class ClearedCompletedAction {
  * @param {TodosAction} action
  * @returns {TodosState}
  */
-export function reducer(state, action) {
+export function todosReducer(state, action) {
   switch (action.type) {
     case 'LOCATION_CHANGED': {
       const nowShowing = getShowingForPathname(action.pathname);

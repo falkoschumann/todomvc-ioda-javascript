@@ -15,7 +15,7 @@ import {
   ToggleCommandHandler,
 } from 'todos-backend';
 
-import { reducer, initialState } from './components/reducer';
+import { todosReducer, initialTodosState } from './components/todosReducer';
 import TodoApp from './components/TodoApp';
 import reportWebVitals from './reportWebVitals';
 
@@ -32,7 +32,7 @@ const toggleCommandHandler = new ToggleCommandHandler(memoryTodosRepository);
 
 function App() {
   // TODO Extract App to file App.js
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(todosReducer, initialTodosState);
 
   const handleAddTodo = useCallback(async (title) => {
     await addTodoCommandHandler.handle({ title });

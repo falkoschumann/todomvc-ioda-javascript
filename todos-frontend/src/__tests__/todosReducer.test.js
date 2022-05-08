@@ -1,19 +1,19 @@
 // @ts-check
 
-import { Filter } from '../utils.js';
-import { initialState, reducer } from '../reducer.js';
+import { Filter } from '../components/utils.js';
+import { initialTodosState, todosReducer } from '../components/todosReducer.js';
 
 describe('Location changed', () => {
   it('now showing all todo', () => {
     let state = {
-      ...initialState,
+      ...initialTodosState,
       nowShowing: Filter.ACTIVE_TODOS,
       todos: [
         { id: 1, title: 'Taste JavaScript', completed: true },
         { id: 2, title: 'Buy a Unicorn', completed: false },
       ],
     };
-    state = reducer(state, { type: 'LOCATION_CHANGED', pathname: '/' });
+    state = todosReducer(state, { type: 'LOCATION_CHANGED', pathname: '/' });
 
     expect(state).toEqual({
       nowShowing: Filter.ALL_TODOS,
@@ -34,13 +34,13 @@ describe('Location changed', () => {
 
   it('now showing active todo', () => {
     let state = {
-      ...initialState,
+      ...initialTodosState,
       todos: [
         { id: 1, title: 'Taste JavaScript', completed: true },
         { id: 2, title: 'Buy a Unicorn', completed: false },
       ],
     };
-    state = reducer(state, { type: 'LOCATION_CHANGED', pathname: '/active' });
+    state = todosReducer(state, { type: 'LOCATION_CHANGED', pathname: '/active' });
 
     expect(state).toEqual({
       nowShowing: Filter.ACTIVE_TODOS,
@@ -58,13 +58,13 @@ describe('Location changed', () => {
 
   it('now showing completed todo', () => {
     let state = {
-      ...initialState,
+      ...initialTodosState,
       todos: [
         { id: 1, title: 'Taste JavaScript', completed: true },
         { id: 2, title: 'Buy a Unicorn', completed: false },
       ],
     };
-    state = reducer(state, { type: 'LOCATION_CHANGED', pathname: '/completed' });
+    state = todosReducer(state, { type: 'LOCATION_CHANGED', pathname: '/completed' });
 
     expect(state).toEqual({
       nowShowing: Filter.COMPLETED_TODOS,
@@ -83,7 +83,7 @@ describe('Location changed', () => {
 
 describe('Todos loaded', () => {
   it('updates todo', () => {
-    const state = reducer(initialState, {
+    const state = todosReducer(initialTodosState, {
       type: 'TODOS_LOADED',
       todos: [
         { id: 1, title: 'Taste JavaScript', completed: true },
@@ -111,7 +111,10 @@ describe('Todos loaded', () => {
 
 describe('Update new todo', () => {
   it('updates new todos text', () => {
-    const state = reducer(initialState, { type: 'UPDATE_NEW_TODO', text: 'Taste JavaScript' });
+    const state = todosReducer(initialTodosState, {
+      type: 'UPDATE_NEW_TODO',
+      text: 'Taste JavaScript',
+    });
 
     expect(state).toEqual({
       nowShowing: Filter.ALL_TODOS,
@@ -128,11 +131,11 @@ describe('Update new todo', () => {
 describe('Todo added', () => {
   it('clears new todo text and updates todos', () => {
     let state = {
-      ...initialState,
+      ...initialTodosState,
       newTodo: 'Buy a Unicorn',
       todos: [{ id: 1, title: 'Taste JavaScript', completed: true }],
     };
-    state = reducer(state, {
+    state = todosReducer(state, {
       type: 'TODO_ADDED',
       todos: [
         { id: 1, title: 'Taste JavaScript', completed: true },
@@ -160,7 +163,7 @@ describe('Todo added', () => {
 
 describe('Toggled all', () => {
   it('updates todos', () => {
-    const state = reducer(initialState, {
+    const state = todosReducer(initialTodosState, {
       type: 'TOGGLED_ALL',
       todos: [
         { id: 1, title: 'Taste JavaScript', completed: true },
@@ -188,7 +191,7 @@ describe('Toggled all', () => {
 
 describe('Toggled', () => {
   it('updates todos', () => {
-    const state = reducer(initialState, {
+    const state = todosReducer(initialTodosState, {
       type: 'TOGGLED',
       todos: [
         { id: 1, title: 'Taste JavaScript', completed: true },
@@ -216,7 +219,7 @@ describe('Toggled', () => {
 
 describe('Destroyed', () => {
   it('updates todos', () => {
-    const state = reducer(initialState, {
+    const state = todosReducer(initialTodosState, {
       type: 'DESTROYED',
       todos: [{ id: 1, title: 'Taste JavaScript', completed: true }],
     });
@@ -236,7 +239,7 @@ describe('Destroyed', () => {
 describe('Edit', () => {
   it('remembers editing todo', () => {
     let state = {
-      ...initialState,
+      ...initialTodosState,
       todos: [
         { id: 1, title: 'Taste JavaScript', completed: true },
         { id: 2, title: 'Buy a Unicorn', completed: false },
@@ -248,7 +251,7 @@ describe('Edit', () => {
       activeTodoCount: 1,
       completedCount: 1,
     };
-    state = reducer(state, { type: 'EDIT', todoId: 1 });
+    state = todosReducer(state, { type: 'EDIT', todoId: 1 });
 
     expect(state).toEqual({
       nowShowing: Filter.ALL_TODOS,
@@ -271,10 +274,10 @@ describe('Edit', () => {
 describe('Saved', () => {
   it('clears editing todo and updates todos', () => {
     let state = {
-      ...initialState,
+      ...initialTodosState,
       editing: 1,
     };
-    state = reducer(state, {
+    state = todosReducer(state, {
       type: 'SAVED',
       todos: [
         { id: 1, title: 'Taste TypeScript', completed: true },
@@ -303,7 +306,7 @@ describe('Saved', () => {
 describe('Cancel', () => {
   it('clears editing todo', () => {
     let state = {
-      ...initialState,
+      ...initialTodosState,
       editing: 1,
       todos: [
         { id: 1, title: 'Taste JavaScript', completed: true },
@@ -316,7 +319,7 @@ describe('Cancel', () => {
       activeTodoCount: 1,
       completedCount: 1,
     };
-    state = reducer(state, { type: 'CANCEL' });
+    state = todosReducer(state, { type: 'CANCEL' });
 
     expect(state).toEqual({
       nowShowing: Filter.ALL_TODOS,
@@ -338,7 +341,7 @@ describe('Cancel', () => {
 
 describe('Cleared completed', () => {
   it('updates todos', () => {
-    const state = reducer(initialState, {
+    const state = todosReducer(initialTodosState, {
       type: 'CLEARED_COMPLETED',
       todos: [{ id: 2, title: 'Buy a Unicorn', completed: false }],
     });
