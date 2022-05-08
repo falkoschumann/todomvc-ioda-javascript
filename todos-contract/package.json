@@ -1,0 +1,10 @@
+{
+  "name": "todos-contract",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

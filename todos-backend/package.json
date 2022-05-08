@@ -2,16 +2,18 @@
   "name": "todos-backend",
   "version": "0.1.0",
   "private": true,
-  "main": "lib/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.js",
   "type": "module",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest lib",
-    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch-all lib",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage lib"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch-all",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+  },
+  "dependencies": {
+    "todos-contract": "^0.1.0"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",

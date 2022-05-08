@@ -1,24 +1,24 @@
 {
   "name": "todos",
   "workspaces": [
+    "todos-contract",
     "todos-backend",
     "todos-frontend"
   ],
   "scripts": {
-    "build": "tsc --build",
-    "watch": "tsc --build --watch",
-    "clean": "tsc --build --clean",
+    "build": "npm run build --workspace=todos-frontend",
+    "postbuild": "npm test && npm run analyze",
     "start": "npm start --workspace=todos-frontend",
-    "test": "npm run test --workspaces --if-present",
+    "test": "npm test --workspaces --if-present",
     "analyze": "npm run eslint && npm run prettier:check",
-    "eslint": "eslint */lib */src",
-    "eslint:fix": "eslint --fix */lib */src",
+    "analyze:fix": "npm run eslint:fix && npm run prettier:write",
+    "eslint": "eslint */src",
+    "eslint:fix": "eslint --fix */src",
     "prettier:check": "prettier --check .",
-    "prettier:fix": "prettier --write ."
+    "prettier:write": "prettier --write ."
   },
   "devDependencies": {
     "eslint": "^8.14.0",
-    "prettier": "^2.6.2",
-    "typescript": "^4.6.4"
+    "prettier": "^2.6.2"
   }
 }

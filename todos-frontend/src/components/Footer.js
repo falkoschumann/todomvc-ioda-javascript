@@ -6,20 +6,17 @@ import classNames from 'classnames';
 import { Filter, pluralize } from './utils';
 
 /**
- * @typedef {import('react').ReactElement<any, any>} ReactElement
- */
-
-/**
- *
- * @param {object} props
- * @param {number} props.activeTodoCount
- * @param {number} props.completedCount
- * @param {Filter} props.nowShowing
- * @param {() => void} props.onClearCompleted
- * @returns {ReactElement}
+ * @param {{
+ *     activeTodoCount: number,
+ *     completedCount: number,
+ *     nowShowing: Filter,
+ *     onClearCompleted(): void,
+ * }} props
  */
 function Footer({ activeTodoCount, completedCount, nowShowing, onClearCompleted }) {
-  if (activeTodoCount === 0 && completedCount === 0) return null;
+  if (activeTodoCount === 0 && completedCount === 0) {
+    return null;
+  }
 
   return (
     <footer className="footer">

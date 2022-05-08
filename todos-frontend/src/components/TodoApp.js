@@ -1,69 +1,91 @@
 // @ts-check
 
-import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { Filter } from './utils';
 import Footer from './Footer';
 import Header from './Header';
 import Main from './Main';
 
 /**
- * @typedef {import('react').ReactElement} ReactElement
- */
-
-/**
- * @typedef {import('./utils').Filter} Filter
- * @typedef {import('./TodoItem').TodoId} TodoId
- * @typedef {import('./TodoItem').Todo} Todo
- */
-
-/**
- * @param {object} props
- * @param {number} props.activeTodoCount
- * @param {number} props.completedCount
- * @param {TodoId} props.editing
- * @param {string} props.newTodo
- * @param {Filter} props.nowShowing
- * @param {Todo[]} props.shownTodos
- * @param {Todo[]} props.todos
- * @param {(title: string) => void} props.onAddTodo
- * @param {() => void} props.onCancel
- * @param {() => void} props.onClearCompleted
- * @param {(id: TodoId) => void} props.onDestroy
- * @param {(id: TodoId) => void} props.onEdit
- * @param {(pathname: string) => void} props.onLocationChanged
- * @param {(id: TodoId, newTitle: string) => void} props.onSave
- * @param {(id: TodoId) => void} props.onToggle
- * @param {(checked: boolean) => void} props.onToggleAll
- * @param {(title: string) => void} props.onUpdateNewTodo
- * @returns {ReactElement}
+ * @param {{
+ *     editing: import('todos-contract').TodoId,
+ *     todos: import('todos-contract').Todo[],
+ *     onAddTodo(title: string): void,
+ *     onCancel(): void,
+ *     onClearCompleted(): void,
+ *     onDestroy(id: import('todos-contract').TodoId): void,
+ *     onEdit(id: import('todos-contract').TodoId): void,
+ *     onSave(id: import('todos-contract').TodoId, newTitle: string): void,
+ *     onToggle(id: import('todos-contract').TodoId): void,
+ *     onToggleAll(checked: boolean): void,
+ * }} props
  */
 function TodoApp({
-  activeTodoCount,
-  completedCount,
   editing,
-  newTodo,
-  nowShowing,
-  shownTodos,
   todos,
   onAddTodo,
   onCancel,
   onClearCompleted,
   onDestroy,
   onEdit,
-  onLocationChanged,
   onSave,
   onToggle,
   onToggleAll,
-  onUpdateNewTodo,
 }) {
   const { pathname } = useLocation();
-  useEffect(() => onLocationChanged(pathname), [pathname, onLocationChanged]);
 
+  /**
+   * @param {string} pathname
+   * @returns {Filter}
+   */
+  function determineFilter(pathname) {
+    switch (pathname) {
+      case '/active':
+        return Filter.ACTIVE_TODOS;
+      case '/completed':
+        return Filter.COMPLETED_TODOS;
+      default:
+        return Filter.ALL_TODOS;
+    }
+  }
+
+  /**
+   * @param {Filter} filter
+   */
+  function determineShownTodos(filter) {
+    return todos.filter((todo) => {
+      switch (filter) {
+        case Filter.ACTIVE_TODOS:
+          return !todo.completed;
+        case Filter.COMPLETED_TODOS:
+          return todo.completed;
+        case Filter.ALL_TODOS:
+        default:
+          return true;
+      }
+    });
+  }
+
+  /**
+   * @param {import('todos-contract').Todo[]} todos
+
+   */
+  function countTodos(todos) {
+    const activeTodoCount = todos.reduce((count, todo) => {
+      return todo.completed ? count : count + 1;
+    }, 0);
+    const completedCount = todos.length - activeTodoCount;
+    return { activeTodoCount, completedCount };
+  }
+
+  const nowShowing = determineFilter(pathname);
+  const shownTodos = determineShownTodos(nowShowing);
+  const { activeTodoCount, completedCount } = countTodos(todos);
   return (
     <>
       <section className="todoapp">
-        <Header newTodo={newTodo} onUpdateNewTodo={onUpdateNewTodo} onAddTodo={onAddTodo} />
+        <Header onAddTodo={onAddTodo} />
         <Main
           shownTodos={shownTodos}
           todos={todos}

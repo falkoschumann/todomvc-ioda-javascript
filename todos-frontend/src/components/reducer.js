@@ -2,76 +2,26 @@
 
 import { Filter } from './utils.js';
 
-/**
- * @typedef {import('./TodoItem').TodoId} TodoId
- * @typedef {import('./TodoItem').Todo} Todo
- */
-
-/**
- * @typedef {object} TodosState
- * @property {Filter} nowShowing
- * @property {TodoId} editing
- * @property {string} newTodo
- * @property {Todo[]} todos
- * @property {Todo[]} shownTodos
- * @property {number} activeTodoCount
- * @property {number} completedCount
- *
- * @typedef {object} TodosLoadedAction
- * @property {'TODOS_LOADED'} type
- * @property {Todo[]} todos
- *
- * @typedef {object} LocationChangedAction
- * @property {'LOCATION_CHANGED'} type
- * @property {string} pathname
- *
- * @typedef {object} UpdateNewTodoAction
- * @property {'UPDATE_NEW_TODO'} type
- * @property {string} text
- *
- * @typedef {object} TodoAddedAction
- * @property {'TODO_ADDED'} type
- * @property {Todo[]} todos
- *
- * @typedef {object} ToggledAllAction
- * @property {'TOGGLED_ALL'} type
- * @property {Todo[]} todos
- *
- * @typedef {object} ToggledAction
- * @property {'TOGGLED'} type
- * @property {Todo[]} todos
- *
- * @typedef {object} DestroyedAction
- * @property {'DESTROYED'} type
- * @property {Todo[]} todos
- *
- * @typedef {object} EditAction
- * @property {'EDIT'} type
- * @property {TodoId} todoId
- *
- * @typedef {object} SavedAction
- * @property {'SAVED'} type
- * @property {Todo[]} todos
- *
- * @typedef {object} CancelAction
- * @property {'CANCEL'} type
- *
- * @typedef {object} ClearedCompletedAction
- * @property {'CLEARED_COMPLETED'} type
- * @property {Todo[]} todos
- *
- * @typedef {TodosLoadedAction
- *   | LocationChangedAction
- *   | UpdateNewTodoAction
- *   | TodoAddedAction
- *   | ToggledAllAction
- *   | ToggledAction
- *   | DestroyedAction
- *   | EditAction
- *   | SavedAction
- *   | CancelAction
- *   | ClearedCompletedAction} TodosAction
- */
+export class TodosState {
+  /**
+   * @param {Filter} nowShowing
+   * @param {import('todos-contract').TodoId} editing
+   * @param {string} newTodo
+   * @param {import('todos-contract').Todo[]} todos
+   * @param {import('todos-contract').Todo[]} shownTodos
+   * @param {number} activeTodoCount
+   * @param {number} completedCount
+   */
+  constructor(nowShowing, editing, newTodo, todos, shownTodos, activeTodoCount, completedCount) {
+    this.nowShowing = nowShowing;
+    this.editing = editing;
+    this.newTodo = newTodo;
+    this.todos = todos;
+    this.shownTodos = shownTodos;
+    this.activeTodoCount = activeTodoCount;
+    this.completedCount = completedCount;
+  }
+}
 
 /** @type {TodosState} */
 export const initialState = {
@@ -83,6 +33,126 @@ export const initialState = {
   activeTodoCount: 0,
   completedCount: 0,
 };
+
+export class TodosLoadedAction {
+  /**
+   * @param {import('todos-contract').Todo[]} todos
+   */
+  constructor(todos) {
+    this.type = 'TODOS_LOADED';
+    this.todos = todos;
+  }
+}
+
+export class LocationChangedAction {
+  /**
+   * @param {string} pathname
+   */
+  constructor(pathname) {
+    this.type = 'LOCATION_CHANGED';
+    this.pathname = pathname;
+  }
+}
+
+export class UpdateNewTodoAction {
+  /**
+   * @param {string} text
+   */
+  constructor(text) {
+    this.type = 'UPDATE_NEW_TODO';
+    this.text = text;
+  }
+}
+export class TodoAddedAction {
+  /**
+   * @param {import('todos-contract').Todo[]} todos
+   */
+  constructor(todos) {
+    this.type = 'TODO_ADDED';
+    this.todos = todos;
+  }
+}
+
+export class ToggledAllAction {
+  /**
+   * @param {import('todos-contract').Todo[]} todos
+   */
+  constructor(todos) {
+    this.type = 'TOGGLED_ALL';
+    this.todos = todos;
+  }
+}
+
+export class ToggledAction {
+  /**
+   * @param {import('todos-contract').Todo[]} todos
+   */
+  constructor(todos) {
+    this.type = 'TOGGLED';
+    this.todos = todos;
+  }
+}
+
+export class DestroyedAction {
+  /**
+   * @param {import('todos-contract').Todo[]} todos
+   */
+  constructor(todos) {
+    this.type = 'DESTROYED';
+    this.todos = todos;
+  }
+}
+
+export class EditAction {
+  /**
+   * @param {import('todos-contract').TodoId} todoId
+   */
+  constructor(todoId) {
+    this.type = 'EDIT';
+    this.todoId = todoId;
+  }
+}
+
+export class SavedAction {
+  /**
+   * @param {import('todos-contract').Todo[]} todos
+   */
+  constructor(todos) {
+    this.type = 'SAVED';
+    this.todos = todos;
+  }
+}
+
+export class CancelAction {
+  constructor() {
+    this.type = 'CANCEL';
+  }
+}
+export class ClearedCompletedAction {
+  /**
+   * @param {import('todos-contract').Todo[]} todos
+   */
+  constructor(todos) {
+    this.type = 'CLEARED_COMPLETED';
+    this.todos = todos;
+  }
+}
+
+/**
+ * @typedef {
+ *     | TodosLoadedAction
+ *     | LocationChangedAction
+ *     | UpdateNewTodoAction
+ *     | TodoAddedAction
+ *     | ToggledAllAction
+ *     | ToggledAction
+ *     | DestroyedAction
+ *     | EditAction
+ *     | SavedAction
+ *     | CancelAction
+ *     | ClearedCompletedAction
+ * } TodosAction
+ */
 
 /**
  * @param {TodosState} state
@@ -126,6 +196,9 @@ export function reducer(state, action) {
   }
 }
 
+/**
+ * @param {string} pathname
+ */
 function getShowingForPathname(pathname) {
   switch (pathname) {
     case '/active':
@@ -137,6 +210,10 @@ function getShowingForPathname(pathname) {
   }
 }
 
+/**
+ * @param {import('todos-contract').Todo[]} todos
+ * @param {Filter} nowShowing
+ */
 function getShownTodos(todos, nowShowing) {
   const shownTodos = todos.filter((todo) => {
     switch (nowShowing) {

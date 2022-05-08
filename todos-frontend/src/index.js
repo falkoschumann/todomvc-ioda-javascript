@@ -4,7 +4,16 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import React, { useCallback, useEffect, useReducer } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { messageHandler } from 'todos-backend';
+import {
+  AddTodoCommandHandler,
+  ClearCompletedCommandHandler,
+  DestroyCommandHandler,
+  MemoryTodosRepository,
+  SaveCommandHandler,
+  SelectTodosQueryHandler,
+  ToggleAllCommandHandler,
+  ToggleCommandHandler,
+} from 'todos-backend';
 
 import { reducer, initialState } from './components/reducer';
 import TodoApp from './components/TodoApp';
@@ -12,92 +21,85 @@ import reportWebVitals from './reportWebVitals';
 
 import './index.css';
 
-/**
- * @typedef {import('./components/TodoItem').TodoId} TodoId
- */
+const memoryTodosRepository = new MemoryTodosRepository();
+const addTodoCommandHandler = new AddTodoCommandHandler(memoryTodosRepository);
+const clearCompletedCommandHandler = new ClearCompletedCommandHandler(memoryTodosRepository);
+const destroyCommandHandler = new DestroyCommandHandler(memoryTodosRepository);
+const saveCommandHandler = new SaveCommandHandler(memoryTodosRepository);
+const selectTodosQueryHandler = new SelectTodosQueryHandler(memoryTodosRepository);
+const toggleAllCommandHandler = new ToggleAllCommandHandler(memoryTodosRepository);
+const toggleCommandHandler = new ToggleCommandHandler(memoryTodosRepository);
 
 function App() {
-  // TODO: Extract App to file App.js
+  // TODO Extract App to file App.js
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const handleAddTodo = useCallback((title) => {
-    messageHandler.addTodo(title);
-    const todos = messageHandler.selectTodos();
-    dispatch({ type: 'TODO_ADDED', todos });
+  const handleAddTodo = useCallback(async (title) => {
+    await addTodoCommandHandler.handle({ title });
+    const result = await selectTodosQueryHandler.handle({});
+    dispatch({ type: 'TODO_ADDED', todos: result.todos });
   }, []);
 
   const handleCancel = useCallback(() => {
     dispatch({ type: 'CANCEL' });
   }, []);
 
-  const handleClearCompleted = useCallback(() => {
-    messageHandler.clearCompleted();
-    const todos = messageHandler.selectTodos();
-    dispatch({ type: 'CLEARED_COMPLETED', todos });
+  const handleClearCompleted = useCallback(async () => {
+    await clearCompletedCommandHandler.handle({});
+    const result = await selectTodosQueryHandler.handle({});
+    dispatch({ type: 'CLEARED_COMPLETED', todos: result.todos });
   }, []);
 
-  const handleDestroy = useCallback((todoId) => {
-    messageHandler.destroy(todoId);
-    const todos = messageHandler.selectTodos();
-    dispatch({ type: 'DESTROYED', todos });
+  const handleDestroy = useCallback(async (todoId) => {
+    await destroyCommandHandler.handle({ todoId });
+    const result = await selectTodosQueryHandler.handle({});
+    dispatch({ type: 'DESTROYED', todos: result.todos });
   }, []);
 
   const handleEdit = useCallback((todoId) => {
     dispatch({ type: 'EDIT', todoId });
   }, []);
 
-  const handleLocationChanged = useCallback((pathname) => {
-    dispatch({ type: 'LOCATION_CHANGED', pathname });
+  const handleSave = useCallback(async (todoId, newTitle) => {
+    await saveCommandHandler.handle({ todoId, newTitle });
+    const result = await selectTodosQueryHandler.handle({});
+    dispatch({ type: 'SAVED', todos: result.todos });
   }, []);
 
-  const handleSave = useCallback((todoId, newTitle) => {
-    messageHandler.save(todoId, newTitle);
-    const todos = messageHandler.selectTodos();
-    dispatch({ type: 'SAVED', todos });
+  const handleToggle = useCallback(async (todoId) => {
+    await toggleCommandHandler.handle({ todoId });
+    const result = await selectTodosQueryHandler.handle({});
+    dispatch({ type: 'TOGGLED', todos: result.todos });
   }, []);
 
-  const handleToggle = useCallback((todoId) => {
-    messageHandler.toggle(todoId);
-    const todos = messageHandler.selectTodos();
-    dispatch({ type: 'TOGGLED', todos });
-  }, []);
-
-  const handleToggleAll = useCallback((checked) => {
-    messageHandler.toggleAll(checked);
-    const todos = messageHandler.selectTodos();
-    dispatch({ type: 'TOGGLED_ALL', todos });
-  }, []);
-
-  const handleUpdateNewTodo = useCallback((text) => {
-    dispatch({ type: 'UPDATE_NEW_TODO', text });
+  const handleToggleAll = useCallback(async (checked) => {
+    await toggleAllCommandHandler.handle({ checked });
+    const result = await selectTodosQueryHandler.handle({});
+    dispatch({ type: 'TOGGLED_ALL', todos: result.todos });
   }, []);
 
   useEffect(() => {
-    const todos = messageHandler.selectTodos();
-    dispatch({ type: 'TODOS_LOADED', todos });
+    async function loadTodos() {
+      const result = await selectTodosQueryHandler.handle({});
+      dispatch({ type: 'TODOS_LOADED', todos: result.todos });
+    }
+
+    loadTodos();
   }, []);
 
-  // TODO: Move Router to <TodoApp>
   return (
     <Router>
       <TodoApp
-        activeTodoCount={state.activeTodoCount}
-        completedCount={state.completedCount}
         editing={state.editing}
-        newTodo={state.newTodo}
-        nowShowing={state.nowShowing}
-        shownTodos={state.shownTodos}
         todos={state.todos}
         onAddTodo={handleAddTodo}
         onCancel={handleCancel}
         onClearCompleted={handleClearCompleted}
         onDestroy={handleDestroy}
         onEdit={handleEdit}
-        onLocationChanged={handleLocationChanged}
         onSave={handleSave}
         onToggle={handleToggle}
         onToggleAll={handleToggleAll}
-        onUpdateNewTodo={handleUpdateNewTodo}
       />
     </Router>
   );

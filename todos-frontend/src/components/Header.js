@@ -1,28 +1,24 @@
 // @ts-check
 
-/**
- * @typedef {import('react').ChangeEvent<HTMLInputElement>} InputChangeEvent
- * @typedef {import('react').KeyboardEvent} KeyboardEvent
- * @typedef {import('react').ReactElement} ReactElement
- */
+import { useState } from 'react';
 
 /**
- * @param {object} props
- * @param {string} props.newTodo
- * @param {(title: string) => void} props.onAddTodo
- * @param {(title: string) => void} props.onUpdateNewTodo
- * @returns {ReactElement}
+ * @param {{
+ *     onAddTodo(title: string): void,
+ * }} props
  */
-function Header({ newTodo, onAddTodo, onUpdateNewTodo }) {
+function Header({ onAddTodo }) {
+  const [newTodo, setNewTodo] = useState('');
+
   /**
-   * @param {InputChangeEvent} event
+   * @param {import('react').ChangeEvent<HTMLInputElement>} event
    */
   function handleChange(event) {
-    onUpdateNewTodo(event.target.value);
+    setNewTodo(event.target.value);
   }
 
   /**
-   * @param {KeyboardEvent} event
+   * @param {import('react').KeyboardEvent} event
    */
   function handleNewTodoKeyDown(event) {
     if (event.code !== 'Enter') return;
@@ -30,6 +26,7 @@ function Header({ newTodo, onAddTodo, onUpdateNewTodo }) {
     event.preventDefault();
     const text = newTodo.trim();
     if (text) {
+      setNewTodo('');
       onAddTodo(text);
     }
   }
@@ -41,8 +38,8 @@ function Header({ newTodo, onAddTodo, onUpdateNewTodo }) {
         className="new-todo"
         placeholder="What needs to be done?"
         value={newTodo}
-        onKeyDown={handleNewTodoKeyDown}
         onChange={handleChange}
+        onKeyDown={handleNewTodoKeyDown}
         autoFocus
       />
     </header>

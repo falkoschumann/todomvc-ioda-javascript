@@ -3,28 +3,18 @@
 import TodoItem from './TodoItem';
 
 /**
- * @typedef {import('react').ChangeEvent<HTMLInputElement>} InputChangeEvent
- * @typedef {import('react').ReactElement} ReactElement
- */
-
-/**
- * @typedef {import('./TodoItem').TodoId} TodoId
- * @typedef {import('./TodoItem').Todo} Todo
- */
-
-/**
- * @param {object} props
- * @param {number} props.activeTodoCount
- * @param {TodoId} props.editing
- * @param {Todo[]} props.shownTodos
- * @param {Todo[]} props.todos
- * @param {() => void} props.onCancel
- * @param {(id: TodoId) => void} props.onDestroy
- * @param {(id: TodoId) => void} props.onEdit
- * @param {(id: TodoId, newTitle: string) => void} props.onSave
- * @param {(id: TodoId) => void} props.onToggle
- * @param {(checked: boolean) => void} props.onToggleAll
- * @returns {ReactElement}
+ * @param {{
+ *     activeTodoCount: number,
+ *     editing: import('todos-contract').TodoId,
+ *     shownTodos: import('todos-contract').Todo[],
+ *     todos: import('todos-contract').Todo[],
+ *     onCancel(): void,
+ *     onDestroy(id: import('todos-contract').TodoId): void,
+ *     onEdit(id: import('todos-contract').TodoId): void,
+ *     onSave(id: import('todos-contract').TodoId, newTitle: string): void,
+ *     onToggle(id: import('todos-contract').TodoId): void,
+ *     onToggleAll(checked: boolean): void,
+ * }} props
  */
 function Main({
   activeTodoCount,
@@ -38,10 +28,12 @@ function Main({
   onToggle,
   onToggleAll,
 }) {
-  if (todos.length === 0) return null;
+  if (todos.length === 0) {
+    return null;
+  }
 
   /**
-   * @param {InputChangeEvent} event
+   * @param {import('react').ChangeEvent<HTMLInputElement>} event
    */
   function handleToggleAll(event) {
     onToggleAll(event.target.checked);

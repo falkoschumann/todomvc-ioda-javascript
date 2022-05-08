@@ -6,33 +6,23 @@ import classNames from 'classnames';
 import { usePrevious } from './utils';
 
 /**
- * @typedef {import('react').ChangeEvent<HTMLInputElement>} InputChangeEvent
- * @typedef {import('react').KeyboardEvent} KeyboardEvent
- * @typedef {import('react').ReactElement} ReactElement
- */
-
-/**
- * @typedef {number} TodoId
- *
- * @typedef {Object} Todo
- * @property {TodoId} id
- * @property {string} title
- * @property {boolean} completed
- */
-
-/**
- * @param {object} props
- * @param {boolean} props.editing
- * @param {Todo} props.todo
- * @param {() => void} props.onCancel
- * @param {() => void} props.onDestroy
- * @param {() => void} props.onEdit
- * @param {(newTitle: string) => void} props.onSave
- * @param {() => void} props.onToggle
- * @returns {ReactElement}
+ * @param {{
+ *     editing: boolean,
+ *     todo: import('todos-contract').Todo,
+ *     onCancel(): void,
+ *     onDestroy(): void,
+ *     onEdit(): void,
+ *     onSave(newTitle: string): void,
+ *     onToggle(): void,
+ * }} props
  */
 function TodoItem({ editing, todo, onCancel, onDestroy, onEdit, onSave, onToggle }) {
   const [editText, setEditText] = useState(todo.title);
+
+  function handleEdit() {
+    onEdit();
+    setEditText(todo.title);
+  }
 
   function handleSubmit() {
     const value = editText.trim();
@@ -44,13 +34,19 @@ function TodoItem({ editing, todo, onCancel, onDestroy, onEdit, onSave, onToggle
     }
   }
 
-  function handleEdit() {
-    onEdit();
-    setEditText(todo.title);
+  /**
+   * @param {import('react').ChangeEvent<HTMLInputElement>} event
+   */
+  function handleChange(event) {
+    if (!editing) {
+      return;
+    }
+
+    setEditText(event.target.value);
   }
 
   /**
-   * @param {KeyboardEvent} event
+   * @param {import('react').KeyboardEvent} event
    */
   function handleKeyDown(event) {
     switch (event.key) {
@@ -66,20 +62,12 @@ function TodoItem({ editing, todo, onCancel, onDestroy, onEdit, onSave, onToggle
     }
   }
 
-  /**
-   * @param {InputChangeEvent} event
-   */
-  function handleChange(event) {
-    if (!editing) return;
-
-    setEditText(event.target.value);
-  }
-
   const editFieldRef = useRef(null);
   const prevEditing = usePrevious(editing);
-
   useEffect(() => {
-    if (prevEditing || !editing) return;
+    if (prevEditing || !editing) {
+      return;
+    }
 
     const editField = editFieldRef.current;
     editField.focus();
