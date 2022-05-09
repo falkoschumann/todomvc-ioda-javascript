@@ -1,17 +1,16 @@
 // @ts-check
 
-import { ClearCompletedCommandHandler } from '../messagehandlers/ClearCompletedCommandHandler';
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
+import { handleDestroyCommand } from '../messagehandlers/handleDestroyCommand';
 
-describe('Clear completed', () => {
-  it('removes completed todos', async () => {
+describe('Destroy', () => {
+  it('removes the todo', async () => {
     const todosRepository = new MemoryTodosRepository([
       { id: 1, title: 'Taste JavaScript', completed: true },
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
-    const handler = new ClearCompletedCommandHandler(todosRepository);
 
-    const status = await handler.handle({});
+    const status = await handleDestroyCommand(todosRepository, { todoId: 1 });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();

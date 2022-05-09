@@ -1,7 +1,7 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { SaveCommandHandler } from '../messagehandlers/SaveCommandHandler';
+import { handleSaveCommand } from '../messagehandlers/handleSaveCommand';
 
 describe('Save', () => {
   it('changes the todos title', async () => {
@@ -9,9 +9,11 @@ describe('Save', () => {
       { id: 1, title: 'Taste JavaScript', completed: true },
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
-    const handler = new SaveCommandHandler(todosRepository);
 
-    const status = await handler.handle({ todoId: 1, newTitle: 'Taste TypeScript' });
+    const status = await handleSaveCommand(todosRepository, {
+      todoId: 1,
+      newTitle: 'Taste TypeScript',
+    });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();

@@ -1,34 +1,30 @@
+// @ts-check
+
 import { useCallback, useEffect, useReducer } from 'react';
 
 import {
-  AddTodoCommandHandler,
-  ClearCompletedCommandHandler,
-  DestroyCommandHandler,
   MemoryTodosRepository,
-  SaveCommandHandler,
-  SelectTodosQueryHandler,
-  ToggleAllCommandHandler,
-  ToggleCommandHandler,
+  handleAddTodoCommand,
+  handleClearCompletedCommand,
+  handleDestroyCommand,
+  handleSaveCommand,
+  handleSelectTodosQuery,
+  handleToggleAllCommand,
+  handleToggleCommand,
 } from 'todos-backend';
+import { AddTodoCommand } from 'todos-contract';
 
 import { initialTodosState, todosReducer } from './components/todosReducer';
 import TodoApp from './components/TodoApp';
 
-const memoryTodosRepository = new MemoryTodosRepository();
-const addTodoCommandHandler = new AddTodoCommandHandler(memoryTodosRepository);
-const clearCompletedCommandHandler = new ClearCompletedCommandHandler(memoryTodosRepository);
-const destroyCommandHandler = new DestroyCommandHandler(memoryTodosRepository);
-const saveCommandHandler = new SaveCommandHandler(memoryTodosRepository);
-const selectTodosQueryHandler = new SelectTodosQueryHandler(memoryTodosRepository);
-const toggleAllCommandHandler = new ToggleAllCommandHandler(memoryTodosRepository);
-const toggleCommandHandler = new ToggleCommandHandler(memoryTodosRepository);
+const todosRepository = new MemoryTodosRepository();
 
 function App() {
   const [state, dispatch] = useReducer(todosReducer, initialTodosState);
 
   const handleAddTodo = useCallback(async (title) => {
-    await addTodoCommandHandler.handle({ title });
-    const result = await selectTodosQueryHandler.handle({});
+    await handleAddTodoCommand(todosRepository, new AddTodoCommand(title));
+    const result = await handleSelectTodosQuery(todosRepository, {});
     dispatch({ type: 'TODO_ADDED', todos: result.todos });
   }, []);
 
@@ -37,14 +33,14 @@ function App() {
   }, []);
 
   const handleClearCompleted = useCallback(async () => {
-    await clearCompletedCommandHandler.handle({});
-    const result = await selectTodosQueryHandler.handle({});
+    await handleClearCompletedCommand(todosRepository, {});
+    const result = await handleSelectTodosQuery(todosRepository, {});
     dispatch({ type: 'CLEARED_COMPLETED', todos: result.todos });
   }, []);
 
   const handleDestroy = useCallback(async (todoId) => {
-    await destroyCommandHandler.handle({ todoId });
-    const result = await selectTodosQueryHandler.handle({});
+    await handleDestroyCommand(todosRepository, { todoId });
+    const result = await handleSelectTodosQuery(todosRepository, {});
     dispatch({ type: 'DESTROYED', todos: result.todos });
   }, []);
 
@@ -53,26 +49,26 @@ function App() {
   }, []);
 
   const handleSave = useCallback(async (todoId, newTitle) => {
-    await saveCommandHandler.handle({ todoId, newTitle });
-    const result = await selectTodosQueryHandler.handle({});
+    await handleSaveCommand(todosRepository, { todoId, newTitle });
+    const result = await handleSelectTodosQuery(todosRepository, {});
     dispatch({ type: 'SAVED', todos: result.todos });
   }, []);
 
   const handleToggle = useCallback(async (todoId) => {
-    await toggleCommandHandler.handle({ todoId });
-    const result = await selectTodosQueryHandler.handle({});
+    await handleToggleCommand(todosRepository, { todoId });
+    const result = await handleSelectTodosQuery(todosRepository, {});
     dispatch({ type: 'TOGGLED', todos: result.todos });
   }, []);
 
   const handleToggleAll = useCallback(async (checked) => {
-    await toggleAllCommandHandler.handle({ checked });
-    const result = await selectTodosQueryHandler.handle({});
+    await handleToggleAllCommand(todosRepository, { checked });
+    const result = await handleSelectTodosQuery(todosRepository, {});
     dispatch({ type: 'TOGGLED_ALL', todos: result.todos });
   }, []);
 
   useEffect(() => {
     async function loadTodos() {
-      const result = await selectTodosQueryHandler.handle({});
+      const result = await handleSelectTodosQuery(todosRepository, {});
       dispatch({ type: 'TODOS_LOADED', todos: result.todos });
     }
 

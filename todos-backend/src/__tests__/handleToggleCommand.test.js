@@ -1,13 +1,12 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { ToggleCommandHandler } from '../messagehandlers/ToggleCommandHandler';
+import { handleToggleCommand } from '../messagehandlers/handleToggleCommand';
 
 describe('Toggle', () => {
-  let todosRepository, handler;
+  let todosRepository;
   beforeEach(() => {
     todosRepository = new MemoryTodosRepository();
-    handler = new ToggleCommandHandler(todosRepository);
   });
 
   it('marks the todo as completed', async () => {
@@ -16,7 +15,7 @@ describe('Toggle', () => {
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await handler.handle({ todoId: 2 });
+    const status = await handleToggleCommand(todosRepository, { todoId: 2 });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();
@@ -32,7 +31,7 @@ describe('Toggle', () => {
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await handler.handle({ todoId: 1 });
+    const status = await handleToggleCommand(todosRepository, { todoId: 1 });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();

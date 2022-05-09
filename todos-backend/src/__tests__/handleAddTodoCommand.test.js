@@ -1,19 +1,18 @@
 // @ts-check
 
-import { AddTodoCommandHandler } from '../messagehandlers/AddTodoCommandHandler';
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
+import { handleAddTodoCommand } from '../messagehandlers/handleAddTodoCommand';
 
 describe('Add todo', () => {
-  let todosRepository, handler;
+  let todosRepository;
   beforeEach(() => {
     todosRepository = new MemoryTodosRepository([
       { id: 1, title: 'Taste JavaScript', completed: true },
     ]);
-    handler = new AddTodoCommandHandler(todosRepository);
   });
 
   it('saves new todo', async () => {
-    const status = await handler.handle({ title: 'Buy a Unicorn' });
+    const status = await handleAddTodoCommand(todosRepository, { title: 'Buy a Unicorn' });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();
@@ -24,7 +23,7 @@ describe('Add todo', () => {
   });
 
   it('does nothing if title is empty', async () => {
-    const status = await handler.handle({ title: '' });
+    const status = await handleAddTodoCommand(todosRepository, { title: '' });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();
