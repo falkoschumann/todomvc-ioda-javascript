@@ -1,7 +1,7 @@
 // @ts-check
 
-import { Filter } from '../components/utils.js';
 import { initialTodosState, todosReducer } from '../components/todosReducer.js';
+import { Filter } from '../components/utils.js';
 
 describe('Location changed', () => {
   it('now showing all todo', () => {

@@ -28,9 +28,18 @@
   },
   "eslintConfig": {
     "extends": [
+      "eslint:recommended",
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "sort-imports": [
+        "error",
+        {
+          "allowSeparatedGroups": true
+        }
+      ]
+    }
   },
   "browserslist": {
     "production": [
