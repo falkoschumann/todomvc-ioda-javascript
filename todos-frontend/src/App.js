@@ -20,6 +20,7 @@ import TodoApp from './components/TodoApp';
 const todosRepository = new MemoryTodosRepository();
 
 function App() {
+  // TODO Replace reducer with state selectTodosQueryResult
   const [state, dispatch] = useReducer(todosReducer, initialTodosState);
 
   const handleAddTodo = useCallback(async (title) => {
