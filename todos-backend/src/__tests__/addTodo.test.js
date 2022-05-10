@@ -1,7 +1,7 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { handleAddTodoCommand } from '../messagehandlers/handleAddTodoCommand';
+import { addTodo } from '../messagehandlers/addTodo';
 
 describe('Add todo', () => {
   let todosRepository;
@@ -12,7 +12,7 @@ describe('Add todo', () => {
   });
 
   it('saves new todo', async () => {
-    const status = await handleAddTodoCommand(todosRepository, { title: 'Buy a Unicorn' });
+    const status = await addTodo(todosRepository, { title: 'Buy a Unicorn' });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();
@@ -23,7 +23,7 @@ describe('Add todo', () => {
   });
 
   it('does nothing if title is empty', async () => {
-    const status = await handleAddTodoCommand(todosRepository, { title: '' });
+    const status = await addTodo(todosRepository, { title: '' });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();

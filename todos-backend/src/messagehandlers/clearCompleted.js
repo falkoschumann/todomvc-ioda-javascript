@@ -4,20 +4,19 @@ import { CommandStatus } from 'todos-contract';
 
 /**
  * @param {import('../adapters').TodosRepository} todosRepository
- * @param {import('todos-contract').ToggleCommand} command
+ * @param {import('todos-contract').ClearCompletedCommand} command
  * @returns {Promise<CommandStatus>}
  */
-export async function handleToggleCommand(todosRepository, { todoId }) {
+export async function clearCompleted(todosRepository, /* eslint-disable no-unused-vars */ command) {
   let todos = await todosRepository.loadTodos();
-  todos = toggle(todos, todoId);
+  todos = doClearCompleted(todos);
   await todosRepository.storeTodos(todos);
   return CommandStatus.success();
 }
 
 /**
  * @param {import('todos-contract').Todo[]} todos
- * @param {import('todos-contract').TodoId} todoId
  */
-function toggle(todos, todoId) {
-  return todos.map((todo) => (todo.id === todoId ? { ...todo, completed: !todo.completed } : todo));
+function doClearCompleted(todos) {
+  return todos.filter((todo) => !todo.completed);
 }

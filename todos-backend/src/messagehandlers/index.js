@@ -1,9 +1,9 @@
 // @ts-check
 
-export * from './handleAddTodoCommand.js';
-export * from './handleClearCompletedCommand.js';
-export * from './handleDestroyCommand.js';
-export * from './handleSaveCommand.js';
-export * from './handleSelectTodosQuery.js';
-export * from './handleToggleAllCommand.js';
-export * from './handleToggleCommand.js';
+export * from './addTodo.js';
+export * from './clearCompleted.js';
+export * from './destroy.js';
+export * from './save.js';
+export * from './selectTodos.js';
+export * from './toggleAll.js';
+export * from './toggle.js';

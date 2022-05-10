@@ -1,7 +1,7 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { handleSelectTodosQuery } from '../messagehandlers/handleSelectTodosQuery';
+import { selectTodos } from '../messagehandlers/selectTodos';
 
 describe('Destroy', () => {
   it('removes the todo', async () => {
@@ -10,7 +10,7 @@ describe('Destroy', () => {
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const result = await handleSelectTodosQuery(todosRepository, {});
+    const result = await selectTodos(todosRepository, {});
 
     expect(result).toEqual({
       todos: [

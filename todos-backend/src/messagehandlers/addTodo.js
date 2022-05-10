@@ -7,9 +7,9 @@ import { CommandStatus, Todo } from 'todos-contract';
  * @param {import('todos-contract').AddTodoCommand} command
  * @returns {Promise<CommandStatus>}
  */
-export async function handleAddTodoCommand(todosRepository, { title }) {
+export async function addTodo(todosRepository, { title }) {
   let todos = await todosRepository.loadTodos();
-  todos = addTodo(todos, title);
+  todos = doAddTodo(todos, title);
   await todosRepository.storeTodos(todos);
   return CommandStatus.success();
 }
@@ -18,7 +18,7 @@ export async function handleAddTodoCommand(todosRepository, { title }) {
  * @param {Todo[]} todos
  * @param {string} title
  */
-function addTodo(todos, title) {
+function doAddTodo(todos, title) {
   if (!title) {
     return todos;
   }

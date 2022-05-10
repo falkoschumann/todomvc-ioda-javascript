@@ -1,7 +1,7 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { handleToggleAllCommand } from '../messagehandlers/handleToggleAllCommand';
+import { toggleAll } from '../messagehandlers/toggleAll';
 
 describe('Toggle all', () => {
   let todosRepository;
@@ -15,7 +15,7 @@ describe('Toggle all', () => {
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await handleToggleAllCommand(todosRepository, { checked: true });
+    const status = await toggleAll(todosRepository, { checked: true });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();
@@ -31,7 +31,7 @@ describe('Toggle all', () => {
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await handleToggleAllCommand(todosRepository, { checked: false });
+    const status = await toggleAll(todosRepository, { checked: false });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();

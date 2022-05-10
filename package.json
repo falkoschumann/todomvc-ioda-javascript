@@ -6,7 +6,7 @@
     "todos-frontend"
   ],
   "scripts": {
-    "build": "npm run build --workspace=todos-frontend",
+    "build": "npm run build --workspaces --if-present",
     "start": "npm start --workspace=todos-frontend",
     "test": "npm test --workspaces --if-present",
     "analyze": "npm run eslint && npm run prettier:check",

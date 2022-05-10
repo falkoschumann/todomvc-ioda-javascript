@@ -4,12 +4,12 @@ import { CommandStatus } from 'todos-contract';
 
 /**
  * @param {import('../adapters').TodosRepository} todosRepository
- * @param {import('todos-contract').DestroyCommand} command
+ * @param {import('todos-contract').SaveCommand} command
  * @returns {Promise<CommandStatus>}
  */
-export async function handleDestroyCommand(todosRepository, { todoId }) {
+export async function save(todosRepository, { todoId, newTitle }) {
   let todos = await todosRepository.loadTodos();
-  todos = destroy(todos, todoId);
+  todos = doSave(todos, todoId, newTitle);
   await todosRepository.storeTodos(todos);
   return CommandStatus.success();
 }
@@ -17,7 +17,8 @@ export async function handleDestroyCommand(todosRepository, { todoId }) {
 /**
  * @param {import('todos-contract').Todo[]} todos
  * @param {import('todos-contract').TodoId} todoId
+ * @param {string} newTitle
  */
-function destroy(todos, todoId) {
-  return todos.filter((todo) => todo.id !== todoId);
+function doSave(todos, todoId, newTitle) {
+  return todos.map((todo) => (todo.id === todoId ? { ...todo, title: newTitle } : todo));
 }

@@ -1,7 +1,7 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { handleClearCompletedCommand } from '../messagehandlers/handleClearCompletedCommand';
+import { clearCompleted } from '../messagehandlers/clearCompleted';
 
 describe('Clear completed', () => {
   it('removes completed todos', async () => {
@@ -10,7 +10,7 @@ describe('Clear completed', () => {
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await handleClearCompletedCommand(todosRepository, {});
+    const status = await clearCompleted(todosRepository, {});
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();

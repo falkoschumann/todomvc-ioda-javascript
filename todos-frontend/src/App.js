@@ -4,13 +4,13 @@ import { useCallback, useEffect, useReducer } from 'react';
 
 import {
   MemoryTodosRepository,
-  handleAddTodoCommand,
-  handleClearCompletedCommand,
-  handleDestroyCommand,
-  handleSaveCommand,
-  handleSelectTodosQuery,
-  handleToggleAllCommand,
-  handleToggleCommand,
+  addTodo,
+  clearCompleted,
+  destroy,
+  save,
+  selectTodos,
+  toggle,
+  toggleAll,
 } from 'todos-backend';
 import { AddTodoCommand } from 'todos-contract';
 
@@ -24,8 +24,8 @@ function App() {
   const [state, dispatch] = useReducer(todosReducer, initialTodosState);
 
   const handleAddTodo = useCallback(async (title) => {
-    await handleAddTodoCommand(todosRepository, new AddTodoCommand(title));
-    const result = await handleSelectTodosQuery(todosRepository, {});
+    await addTodo(todosRepository, new AddTodoCommand(title));
+    const result = await selectTodos(todosRepository, {});
     dispatch({ type: 'TODO_ADDED', todos: result.todos });
   }, []);
 
@@ -34,14 +34,14 @@ function App() {
   }, []);
 
   const handleClearCompleted = useCallback(async () => {
-    await handleClearCompletedCommand(todosRepository, {});
-    const result = await handleSelectTodosQuery(todosRepository, {});
+    await clearCompleted(todosRepository, {});
+    const result = await selectTodos(todosRepository, {});
     dispatch({ type: 'CLEARED_COMPLETED', todos: result.todos });
   }, []);
 
   const handleDestroy = useCallback(async (todoId) => {
-    await handleDestroyCommand(todosRepository, { todoId });
-    const result = await handleSelectTodosQuery(todosRepository, {});
+    await destroy(todosRepository, { todoId });
+    const result = await selectTodos(todosRepository, {});
     dispatch({ type: 'DESTROYED', todos: result.todos });
   }, []);
 
@@ -50,26 +50,26 @@ function App() {
   }, []);
 
   const handleSave = useCallback(async (todoId, newTitle) => {
-    await handleSaveCommand(todosRepository, { todoId, newTitle });
-    const result = await handleSelectTodosQuery(todosRepository, {});
+    await save(todosRepository, { todoId, newTitle });
+    const result = await selectTodos(todosRepository, {});
     dispatch({ type: 'SAVED', todos: result.todos });
   }, []);
 
   const handleToggle = useCallback(async (todoId) => {
-    await handleToggleCommand(todosRepository, { todoId });
-    const result = await handleSelectTodosQuery(todosRepository, {});
+    await toggle(todosRepository, { todoId });
+    const result = await selectTodos(todosRepository, {});
     dispatch({ type: 'TOGGLED', todos: result.todos });
   }, []);
 
   const handleToggleAll = useCallback(async (checked) => {
-    await handleToggleAllCommand(todosRepository, { checked });
-    const result = await handleSelectTodosQuery(todosRepository, {});
+    await toggleAll(todosRepository, { checked });
+    const result = await selectTodos(todosRepository, {});
     dispatch({ type: 'TOGGLED_ALL', todos: result.todos });
   }, []);
 
   useEffect(() => {
     async function loadTodos() {
-      const result = await handleSelectTodosQuery(todosRepository, {});
+      const result = await selectTodos(todosRepository, {});
       dispatch({ type: 'TODOS_LOADED', todos: result.todos });
     }
 

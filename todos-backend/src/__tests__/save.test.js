@@ -1,7 +1,7 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { handleSaveCommand } from '../messagehandlers/handleSaveCommand';
+import { save } from '../messagehandlers/save';
 
 describe('Save', () => {
   it('changes the todos title', async () => {
@@ -10,7 +10,7 @@ describe('Save', () => {
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await handleSaveCommand(todosRepository, {
+    const status = await save(todosRepository, {
       todoId: 1,
       newTitle: 'Taste TypeScript',
     });

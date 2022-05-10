@@ -1,7 +1,7 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { handleDestroyCommand } from '../messagehandlers/handleDestroyCommand';
+import { destroy } from '../messagehandlers/destroy';
 
 describe('Destroy', () => {
   it('removes the todo', async () => {
@@ -10,7 +10,7 @@ describe('Destroy', () => {
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await handleDestroyCommand(todosRepository, { todoId: 1 });
+    const status = await destroy(todosRepository, { todoId: 1 });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();
