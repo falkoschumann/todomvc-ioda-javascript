@@ -6,9 +6,12 @@
     "todos-frontend"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run dist && npm test && npm run analyze",
     "start": "npm start --workspace=todos-frontend",
-    "test": "npm test --workspaces --if-present",
+    "dist": "npm run dist --workspaces --if-present",
+    "test": "jest",
+    "test:watch": "jest --watch-all",
+    "test:coverage": "jest --coverage",
     "analyze": "npm run eslint && npm run prettier:check",
     "analyze:fix": "npm run eslint:fix && npm run prettier:write",
     "eslint": "eslint */src",
