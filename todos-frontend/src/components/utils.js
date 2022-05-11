@@ -3,15 +3,6 @@
 import { useEffect, useRef } from 'react';
 
 /**
- * @enum {string}
- */
-export const Filter = {
-  ALL_TODOS: 'all',
-  ACTIVE_TODOS: 'active',
-  COMPLETED_TODOS: 'completed',
-};
-
-/**
  * @param {number} count
  * @param {string} noun
  */

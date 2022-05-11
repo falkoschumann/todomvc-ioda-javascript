@@ -1,6 +1,6 @@
 // @ts-check
 
-import { useCallback, useEffect, useReducer } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
   MemoryTodosRepository,
@@ -12,82 +12,72 @@ import {
   toggle,
   toggleAll,
 } from 'todos-backend';
-import { AddTodoCommand } from 'todos-contract';
 
-import { initialTodosState, todosReducer } from './components/todosReducer';
-import TodoApp from './components/TodoApp';
+import TodoController from './components/TodoController';
 
 const todosRepository = new MemoryTodosRepository();
+const handleAddTodo = (c) => addTodo(todosRepository, c);
+const handleClearCompleted = (c) => clearCompleted(todosRepository, c);
+const handleDestroy = (c) => destroy(todosRepository, c);
+const handleSave = (c) => save(todosRepository, c);
+const handleSelectTodos = (q) => selectTodos(todosRepository, q);
+const handleToggle = (c) => toggle(todosRepository, c);
+const handleToggleAll = (c) => toggleAll(todosRepository, c);
 
 function App() {
-  // TODO Replace reducer with state selectTodosQueryResult
-  const [state, dispatch] = useReducer(todosReducer, initialTodosState);
+  const [selectTodosQueryResult, setSelectTodosQueryResult] = useState({ todos: [] });
 
-  const handleAddTodo = useCallback(async (title) => {
-    await addTodo(todosRepository, new AddTodoCommand(title));
-    const result = await selectTodos(todosRepository, {});
-    dispatch({ type: 'TODO_ADDED', todos: result.todos });
+  const handleAddTodoCommand = useCallback(async (c) => {
+    await handleAddTodo(c);
+    const result = await handleSelectTodos({});
+    setSelectTodosQueryResult(result);
   }, []);
 
-  const handleCancel = useCallback(() => {
-    dispatch({ type: 'CANCEL' });
+  const handleClearCompletedCommand = useCallback(async (c) => {
+    await handleClearCompleted(c);
+    const result = await handleSelectTodos({});
+    setSelectTodosQueryResult(result);
   }, []);
 
-  const handleClearCompleted = useCallback(async () => {
-    await clearCompleted(todosRepository, {});
-    const result = await selectTodos(todosRepository, {});
-    dispatch({ type: 'CLEARED_COMPLETED', todos: result.todos });
+  const handleDestroyCommand = useCallback(async (c) => {
+    await handleDestroy(c);
+    const result = await handleSelectTodos({});
+    setSelectTodosQueryResult(result);
   }, []);
 
-  const handleDestroy = useCallback(async (todoId) => {
-    await destroy(todosRepository, { todoId });
-    const result = await selectTodos(todosRepository, {});
-    dispatch({ type: 'DESTROYED', todos: result.todos });
+  const handleSaveCommand = useCallback(async (c) => {
+    await handleSave(c);
+    const result = await handleSelectTodos({});
+    setSelectTodosQueryResult(result);
   }, []);
 
-  const handleEdit = useCallback((todoId) => {
-    dispatch({ type: 'EDIT', todoId });
+  const handleSelectTodosQuery = useCallback(async (c) => {
+    const result = await handleSelectTodos({});
+    setSelectTodosQueryResult(result);
   }, []);
 
-  const handleSave = useCallback(async (todoId, newTitle) => {
-    await save(todosRepository, { todoId, newTitle });
-    const result = await selectTodos(todosRepository, {});
-    dispatch({ type: 'SAVED', todos: result.todos });
+  const handleToggleCommand = useCallback(async (c) => {
+    await handleToggle(c);
+    const result = await handleSelectTodos({});
+    setSelectTodosQueryResult(result);
   }, []);
 
-  const handleToggle = useCallback(async (todoId) => {
-    await toggle(todosRepository, { todoId });
-    const result = await selectTodos(todosRepository, {});
-    dispatch({ type: 'TOGGLED', todos: result.todos });
-  }, []);
-
-  const handleToggleAll = useCallback(async (checked) => {
-    await toggleAll(todosRepository, { checked });
-    const result = await selectTodos(todosRepository, {});
-    dispatch({ type: 'TOGGLED_ALL', todos: result.todos });
-  }, []);
-
-  useEffect(() => {
-    async function loadTodos() {
-      const result = await selectTodos(todosRepository, {});
-      dispatch({ type: 'TODOS_LOADED', todos: result.todos });
-    }
-
-    loadTodos();
+  const handleToggleAllCommand = useCallback(async (c) => {
+    await handleToggleAll(c);
+    const result = await handleSelectTodos({});
+    setSelectTodosQueryResult(result);
   }, []);
 
   return (
-    <TodoApp
-      editing={state.editing}
-      todos={state.todos}
-      onAddTodo={handleAddTodo}
-      onCancel={handleCancel}
-      onClearCompleted={handleClearCompleted}
-      onDestroy={handleDestroy}
-      onEdit={handleEdit}
-      onSave={handleSave}
-      onToggle={handleToggle}
-      onToggleAll={handleToggleAll}
+    <TodoController
+      selectTodosQueryResult={selectTodosQueryResult}
+      onAddTodoCommand={handleAddTodoCommand}
+      onClearCompletedCommand={handleClearCompletedCommand}
+      onDestroyCommand={handleDestroyCommand}
+      onSaveCommand={handleSaveCommand}
+      onSelectTodosQuery={handleSelectTodosQuery}
+      onToggleCommand={handleToggleCommand}
+      onToggleAllCommand={handleToggleAllCommand}
     />
   );
 }

@@ -3,7 +3,8 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { Filter, pluralize } from './utils';
+import { Filter } from './data';
+import { pluralize } from './utils';
 
 /**
  * @param {{
