@@ -1,6 +1,6 @@
 # TodoMVC JavaScript with IODA architecture
 
-![TodoMVC](https://github.com/falkoschumann/todomvc-ioda-javascript/actions/workflows/todos.yml/badge.svg)
+![TodoMVC](https://github.com/falkoschumann/todomvc-ioda-javascript/actions/workflows/todomvc.yml/badge.svg)
 
 ## Commands
 
