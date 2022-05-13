@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "npm run dist && npm test && npm run analyze",
-    "start": "npm start --workspace=todos-frontend",
+    "start": "concurrently \"npm start --workspace=todos-backend-server\" \"npm start --workspace=todos-frontend\"",
     "dist": "npm run dist --workspaces --if-present",
     "test": "jest",
     "test:watch": "jest --watch-all",
@@ -21,6 +21,7 @@
     "prettier:write": "prettier --write ."
   },
   "devDependencies": {
+    "concurrently": "^7.1.0",
     "eslint": "^8.14.0",
     "jest": "^28.0.2",
     "prettier": "^2.6.2"
