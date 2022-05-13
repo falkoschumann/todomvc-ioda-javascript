@@ -1,2 +1,4 @@
 build/
 dist/
+
+/todos-backend-server/data/

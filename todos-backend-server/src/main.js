@@ -1,6 +1,7 @@
 // @ts-check
 
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import express from 'express';
 
 import { FileTodosRepository } from './adapters/FileTodosRepository.js';
@@ -18,13 +19,15 @@ const port = process.env.PORT ?? 3000;
 const todosRepository = new FileTodosRepository();
 
 app.use(bodyParser.json());
-app.get('/select-todos', getSelectTodos(todosRepository));
-app.post('/add-todo', postAddTodo(todosRepository));
-app.post('/clear-completed', postClearCompleted(todosRepository));
-app.post('/destroy', postDestroy(todosRepository));
-app.post('/save', postSave(todosRepository));
-app.post('/toggle', postToggle(todosRepository));
-app.post('/toggle-all', postToggleAll(todosRepository));
+app.use(cors());
+
+app.get('/api/todos/select-todos', cors(), getSelectTodos(todosRepository));
+app.post('/api/todos/add-todo', cors(), postAddTodo(todosRepository));
+app.post('/api/todos/clear-completed', cors(), postClearCompleted(todosRepository));
+app.post('/api/todos/destroy', cors(), postDestroy(todosRepository));
+app.post('/api/todos/save', cors(), postSave(todosRepository));
+app.post('/api/todos/toggle', cors(), postToggle(todosRepository));
+app.post('/api/todos/toggle-all', cors(), postToggleAll(todosRepository));
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

@@ -14,11 +14,12 @@
     "body-parser": "^1.20.0",
     "express": "^4.18.1",
     "todos-backend": "^0.1.0",
-    "todos-contract": "0.1.0"
+    "todos-contract": "^0.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
     "@babel/preset-env": "^7.17.10",
+    "cors": "^2.8.5",
     "nodemon": "^2.0.16"
   },
   "nodemonConfig": {
