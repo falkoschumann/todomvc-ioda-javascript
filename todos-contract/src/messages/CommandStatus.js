@@ -3,7 +3,7 @@
 export class CommandStatus {
   /**
    * @param {boolean} success
-   * @param {string=} errorMessage
+   * @param {string} errorMessage
    */
   constructor(success, errorMessage = undefined) {
     this.success = success;

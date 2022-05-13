@@ -2,9 +2,8 @@
 
 import { useCallback, useState } from 'react';
 
-import backend from './backend.js';
-
 import TodoController from './components/TodoController';
+import backend from './backend.js';
 
 function App() {
   const [selectTodosQueryResult, setSelectTodosQueryResult] = useState({ todos: [] });

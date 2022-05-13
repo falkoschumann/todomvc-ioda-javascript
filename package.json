@@ -3,6 +3,7 @@
   "workspaces": [
     "todos-contract",
     "todos-backend",
+    "todos-backend-server",
     "todos-frontend"
   ],
   "scripts": {

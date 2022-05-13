@@ -7,7 +7,7 @@ export class TodosRepository {
   /**
    * @returns {Promise<import('todos-contract').Todo[]>}
    */
-  loadTodos() {
+  async loadTodos() {
     throw new Error('not implemented');
   }
 
@@ -17,7 +17,7 @@ export class TodosRepository {
    * @returns {Promise<void>}
    */
   // eslint-disable-next-line no-unused-vars
-  storeTodos(todos) {
+  async storeTodos(todos) {
     throw new Error('not implemented');
   }
 }

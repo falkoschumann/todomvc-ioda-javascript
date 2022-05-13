@@ -22,13 +22,13 @@ import Main from './Main';
 /**
  * @param {{
  *     selectTodosQueryResult: import('todos-contract').SelectTodosQueryResult,
- *     onAddTodoCommand(c: import('todos-contract').AddTodoCommand): void,
- *     onClearCompletedCommand(c: import('todos-contract').ClearCompletedCommand): void,
- *     onDestroyCommand(c: import('todos-contract').DestroyCommand): void,
- *     onSaveCommand(c: import('todos-contract').SaveCommand): void,
- *     onSelectTodosQuery(c: import('todos-contract').SelectTodosQuery): void,
- *     onToggleCommand(c: import('todos-contract').ToggleCommand): void,
- *     onToggleAllCommand(c: import('todos-contract').ToggleAllCommand): void,
+ *     onAddTodoCommand(c: AddTodoCommand): void,
+ *     onClearCompletedCommand(c: ClearCompletedCommand): void,
+ *     onDestroyCommand(c: DestroyCommand): void,
+ *     onSaveCommand(c: SaveCommand): void,
+ *     onSelectTodosQuery(c: SelectTodosQuery): void,
+ *     onToggleCommand(c: ToggleCommand): void,
+ *     onToggleAllCommand(c: ToggleAllCommand): void,
  * }} props
  */
 function TodoController({

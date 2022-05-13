@@ -1,9 +1,10 @@
 {
   "root": true,
   "env": {
-    "jest": true,
+    "browser": true,
     "es2022": true,
-    "browser": true
+    "jest": true,
+    "node": true
   },
   "extends": ["eslint:recommended"],
   "parserOptions": {
