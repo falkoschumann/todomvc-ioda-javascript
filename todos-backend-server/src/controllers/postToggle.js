@@ -8,7 +8,6 @@ export function postToggle(todosRepository) {
    * @param {import('express').Response} res
    */
   return async (req, res) => {
-    console.log(req.body);
     if (req.body.todoId == null) {
       res.status(400).send('Missing property "todoId" in request body.');
       return;
