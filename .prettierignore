@@ -2,3 +2,4 @@ build/
 dist/
 
 /todos-backend-server/data/
+/todos-backend-server/public/
