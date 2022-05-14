@@ -1,6 +1,5 @@
 // @ts-check
 
-import { SelectTodosQuery } from 'todos-contract';
 import { selectTodos } from 'todos-backend';
 
 export function getSelectTodos(todosRepository) {
@@ -9,7 +8,7 @@ export function getSelectTodos(todosRepository) {
    * @param {import('express').Response} res
    */
   return async (req, res) => {
-    const result = await selectTodos(todosRepository, new SelectTodosQuery());
+    const result = await selectTodos(todosRepository, req.query);
     res.send(result);
   };
 }
