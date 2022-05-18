@@ -1,7 +1,7 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { toggle } from '../messagehandlers/toggle';
+import { createToggleHandler } from '../messagehandlers/toggle';
 
 describe('Toggle', () => {
   let todosRepository;
@@ -9,13 +9,13 @@ describe('Toggle', () => {
     todosRepository = new MemoryTodosRepository();
   });
 
-  it('marks the todo as completed', async () => {
+  it('marks the todo as completed.', async () => {
     todosRepository.storeTodos([
       { id: 1, title: 'Taste JavaScript', completed: true },
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await toggle(todosRepository, { todoId: 2 });
+    const status = await createToggleHandler(todosRepository)({ todoId: 2 });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();
@@ -25,13 +25,13 @@ describe('Toggle', () => {
     ]);
   });
 
-  it('marks the todo as active', async () => {
+  it('marks the todo as active.', async () => {
     todosRepository.storeTodos([
       { id: 1, title: 'Taste JavaScript', completed: true },
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await toggle(todosRepository, { todoId: 1 });
+    const status = await createToggleHandler(todosRepository)({ todoId: 1 });
 
     expect(status).toEqual({ success: true });
     const todos = await todosRepository.loadTodos();

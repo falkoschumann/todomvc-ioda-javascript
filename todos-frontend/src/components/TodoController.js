@@ -121,9 +121,7 @@ function TodoController({
    * @param {import('todos-contract').Todo[]} todos
    */
   function countTodos(todos) {
-    const activeTodoCount = todos.reduce((count, todo) => {
-      return todo.completed ? count : count + 1;
-    }, 0);
+    const activeTodoCount = todos.reduce((count, todo) => (todo.completed ? count : count + 1), 0);
     const completedCount = todos.length - activeTodoCount;
     return { activeTodoCount, completedCount };
   }

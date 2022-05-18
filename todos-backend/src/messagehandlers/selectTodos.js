@@ -1,11 +1,16 @@
 // @ts-check
 
+import { SelectTodosQueryResult } from 'todos-contract';
+
 /**
  * @param {import('../adapters').TodosRepository} todosRepository
- * @param {import('todos-contract').SelectTodosQuery} query
- * @returns {Promise<import('todos-contract').SelectTodosQueryResult>}
  */
-export async function selectTodos(todosRepository, /* eslint-disable no-unused-vars */ query) {
-  let todos = await todosRepository.loadTodos();
-  return { todos };
+export function createSelectTodosHandler(todosRepository) {
+  /**
+   * @param {import('todos-contract').SelectTodosQuery} query
+   */
+  return async (/* eslint-disable no-unused-vars */ query) => {
+    let todos = await todosRepository.loadTodos();
+    return new SelectTodosQueryResult(todos);
+  };
 }

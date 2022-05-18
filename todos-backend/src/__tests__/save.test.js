@@ -1,16 +1,16 @@
 // @ts-check
 
 import { MemoryTodosRepository } from '../adapters/MemoryTodosRepository';
-import { save } from '../messagehandlers/save';
+import { createSaveHandler } from '../messagehandlers/save';
 
 describe('Save', () => {
-  it('changes the todos title', async () => {
+  it('changes the todos title.', async () => {
     const todosRepository = new MemoryTodosRepository([
       { id: 1, title: 'Taste JavaScript', completed: true },
       { id: 2, title: 'Buy a Unicorn', completed: false },
     ]);
 
-    const status = await save(todosRepository, {
+    const status = await createSaveHandler(todosRepository)({
       todoId: 1,
       newTitle: 'Taste TypeScript',
     });

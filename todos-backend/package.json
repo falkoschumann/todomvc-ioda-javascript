@@ -8,9 +8,8 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch-all",
-    "test:coverage": "jest --coverage"
+    "test": "jest --coverage",
+    "test:watch": "jest --watch-all"
   },
   "dependencies": {
     "todos-contract": "^0.1.0"
@@ -20,6 +19,7 @@
     "@babel/preset-env": "^7.17.10",
     "babel-jest": "^28.1.0",
     "@types/jest": "^27.4.1",
-    "jest": "^28.0.2"
+    "jest": "^28.0.2",
+    "jest-html-reporters": "^3.0.6"
   }
 }

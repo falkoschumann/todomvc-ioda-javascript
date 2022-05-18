@@ -4,14 +4,17 @@ import { CommandStatus } from 'todos-contract';
 
 /**
  * @param {import('../adapters').TodosRepository} todosRepository
- * @param {import('todos-contract').DestroyCommand} command
- * @returns {Promise<CommandStatus>}
  */
-export async function destroy(todosRepository, { todoId }) {
-  let todos = await todosRepository.loadTodos();
-  todos = doDestroy(todos, todoId);
-  await todosRepository.storeTodos(todos);
-  return CommandStatus.success();
+export function createDestroyHandler(todosRepository) {
+  /**
+   * @param {import('todos-contract').DestroyCommand} command
+   */
+  return async ({ todoId }) => {
+    let todos = await todosRepository.loadTodos();
+    todos = doDestroy(todos, todoId);
+    await todosRepository.storeTodos(todos);
+    return CommandStatus.success();
+  };
 }
 
 /**

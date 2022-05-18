@@ -4,21 +4,24 @@ import { CommandStatus, Todo } from 'todos-contract';
 
 /**
  * @param {import('../adapters').TodosRepository} todosRepository
- * @param {import('todos-contract').AddTodoCommand} command
- * @returns {Promise<CommandStatus>}
  */
-export async function addTodo(todosRepository, { title }) {
-  let todos = await todosRepository.loadTodos();
-  todos = doAddTodo(todos, title);
-  await todosRepository.storeTodos(todos);
-  return CommandStatus.success();
+export function createAddTodoHandler(todosRepository) {
+  /**
+   * @param {import('todos-contract').AddTodoCommand} command
+   */
+  return async ({ title }) => {
+    let todos = await todosRepository.loadTodos();
+    todos = addTodo(todos, title);
+    await todosRepository.storeTodos(todos);
+    return CommandStatus.success();
+  };
 }
 
 /**
  * @param {Todo[]} todos
  * @param {string} title
  */
-function doAddTodo(todos, title) {
+function addTodo(todos, title) {
   if (!title) {
     return todos;
   }

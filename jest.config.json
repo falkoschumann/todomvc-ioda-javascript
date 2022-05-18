@@ -1,0 +1,12 @@
+{
+  "coverageDirectory": "report/coverage",
+  "reporters": [
+    "default",
+    [
+      "jest-html-reporters",
+      {
+        "publicPath": "./report/test"
+      }
+    ]
+  ]
+}

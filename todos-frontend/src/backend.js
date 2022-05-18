@@ -2,25 +2,25 @@
 
 import {
   MemoryTodosRepository,
-  addTodo,
-  clearCompleted,
-  destroy,
-  save,
-  selectTodos,
-  toggle,
-  toggleAll,
+  createAddTodoHandler,
+  createClearCompletedHandler,
+  createDestroyHandler,
+  createSaveHandler,
+  createSelectTodosHandler,
+  createToggleAllHandler,
+  createToggleHandler,
 } from 'todos-backend';
 
 const todosRepository = new MemoryTodosRepository();
 
 const backend = {
-  addTodo: (c) => addTodo(todosRepository, c),
-  clearCompleted: (c) => clearCompleted(todosRepository, c),
-  destroy: (c) => destroy(todosRepository, c),
-  save: (c) => save(todosRepository, c),
-  selectTodos: (q) => selectTodos(todosRepository, q),
-  toggle: (c) => toggle(todosRepository, c),
-  toggleAll: (c) => toggleAll(todosRepository, c),
+  addTodo: createAddTodoHandler(todosRepository),
+  clearCompleted: createClearCompletedHandler(todosRepository),
+  destroy: createDestroyHandler(todosRepository),
+  save: createSaveHandler(todosRepository),
+  selectTodos: createSelectTodosHandler(todosRepository),
+  toggle: createToggleHandler(todosRepository),
+  toggleAll: createToggleAllHandler(todosRepository),
 };
 
 export default backend;

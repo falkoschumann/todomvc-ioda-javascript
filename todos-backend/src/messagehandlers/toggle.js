@@ -4,14 +4,17 @@ import { CommandStatus } from 'todos-contract';
 
 /**
  * @param {import('../adapters').TodosRepository} todosRepository
- * @param {import('todos-contract').ToggleCommand} command
- * @returns {Promise<CommandStatus>}
  */
-export async function toggle(todosRepository, { todoId }) {
-  let todos = await todosRepository.loadTodos();
-  todos = doToggle(todos, todoId);
-  await todosRepository.storeTodos(todos);
-  return CommandStatus.success();
+export function createToggleHandler(todosRepository) {
+  /**
+   * @param {import('todos-contract').ToggleCommand} command
+   */
+  return async ({ todoId }) => {
+    let todos = await todosRepository.loadTodos();
+    todos = doToggle(todos, todoId);
+    await todosRepository.storeTodos(todos);
+    return CommandStatus.success();
+  };
 }
 
 /**

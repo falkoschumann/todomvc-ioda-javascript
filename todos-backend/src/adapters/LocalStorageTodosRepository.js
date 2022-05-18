@@ -4,7 +4,6 @@ import { TodosRepository } from './TodosRepository.js';
 
 export class LocalStorageTodosRepository extends TodosRepository {
   /**
-   *
    * @returns {Promise<import('todos-contract').Todo[]>}
    */
   async loadTodos() {

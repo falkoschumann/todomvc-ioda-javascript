@@ -4,14 +4,17 @@ import { CommandStatus } from 'todos-contract';
 
 /**
  * @param {import('../adapters').TodosRepository} todosRepository
- * @param {import('todos-contract').SaveCommand} command
- * @returns {Promise<CommandStatus>}
  */
-export async function save(todosRepository, { todoId, newTitle }) {
-  let todos = await todosRepository.loadTodos();
-  todos = doSave(todos, todoId, newTitle);
-  await todosRepository.storeTodos(todos);
-  return CommandStatus.success();
+export function createSaveHandler(todosRepository) {
+  /**
+   * @param {import('todos-contract').SaveCommand} command
+   */
+  return async ({ todoId, newTitle }) => {
+    let todos = await todosRepository.loadTodos();
+    todos = doSave(todos, todoId, newTitle);
+    await todosRepository.storeTodos(todos);
+    return CommandStatus.success();
+  };
 }
 
 /**

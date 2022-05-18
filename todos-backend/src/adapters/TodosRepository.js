@@ -12,12 +12,10 @@ export class TodosRepository {
   }
 
   /**
-   *
    * @param {import('todos-contract').Todo[]} todos
    * @returns {Promise<void>}
    */
-  // eslint-disable-next-line no-unused-vars
-  async storeTodos(todos) {
+  async storeTodos(/* eslint-disable no-unused-vars */ todos) {
     throw new Error('not implemented');
   }
 }

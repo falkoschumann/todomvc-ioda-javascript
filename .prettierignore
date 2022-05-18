@@ -1,5 +1,6 @@
 build/
 dist/
+report/
 
 /todos-backend-server/data/
 /todos-backend-server/public/
